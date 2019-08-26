@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybb.cars.mapper.CarMapper">
+
+    <resultMap id="CarBaseResult" type="com.ybb.cars.domain.entity.Car">
+        <id property="carId" column="car_id"/>
+        <result property="carName" column="car_name"/>
+        <result property="carImage" column="car_image"/>
+        <result property="carPrice" column="car_price"/>
+        <result property="carPlate" column="car_plate"/>
+        <result property="carDetails" column="car_details"/>
+        <result property="carStatus" column="car_status"/>
+        <result property="carTitle" column="car_title"/>
+        <result property="carMenu1Id" column="car_menu1_id"/>
+    </resultMap>
+
+    <select id="findByKeyword" resultMap="CarBaseResult">
+        select c.car_name,c.car_image,c.car_price,c.car_id, c.car_details,c.car_plate,c.car_menu1_id,c.car_status,c.car_title
+        from  car c
+        where c.car_name like concat(concat('%' , #{keyword}),'%') or c.car_title like concat(concat('%' , #{keyword}),'%')
+    </select>
+</mapper>

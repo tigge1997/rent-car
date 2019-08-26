@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybb.cars.mapper.CarMenuMapper">
+
+    <resultMap id="Base_CarMenu" type="CarMenu">
+        <id property="carMenuId" column="car_menuid"/>
+        <result property="carMenuName" column="car_menu_name"/>
+        <result property="cateId" column="cate_id"/>
+    </resultMap>
+
+    <resultMap id="Base_SubMenu_Vo"
+               type="com.ybb.cars.domain.vo.CarMenuVo"
+               extends="Base_CarMenu">
+
+        <collection property="carMenu1List" ofType="com.ybb.cars.domain.entity.CarMenu1">
+            <id property="carMenu1Id" column="car_menu1_id"/>
+            <result property="carMenuId" column="car_menu_id"/>
+            <result property="carMenu1Name" column="car_menu1_name" />
+        </collection>
+
+    </resultMap>
+</mapper>

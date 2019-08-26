@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybb.cars.mapper.CategoryMapper">
+
+    <resultMap id="categoryMap" type="com.ybb.cars.domain.vo.CateGoryVo">
+        <id property="cateId" column="cate_id"/>
+        <result property="name" column="name"/>
+        <collection property="carMenus" ofType="com.ybb.cars.domain.vo.CarMenuVo">
+            <result property="carMenuId" column="car_menu_id"/>
+             <result property="carMenuName" column="car_menu_name"/>
+             <collection property="carMenu1List" ofType="com.ybb.cars.domain.entity.CarMenu1">
+                    <id property="carMenu1Id" column="car_menu1_id"/>
+                    <result property="carMenuId" column="car_menu_id"/>
+                    <result property="carMenu1Name" column="car_menu1_name" />
+                </collection>
+        </collection>
+    </resultMap>
+
+    <select id="findCategoryVos" resultMap="categoryMap">
+        select *
+        from category c
+            LEFT JOIN  car_menu sm ON c.cate_id = sm.cate_id
+            LEFT JOIN car_menu1 sm1 ON sm.car_menu_id = sm1.car_menu_id
+    </select>
+
+    <resultMap id="baseCategory" type="com.ybb.cars.domain.entity.Category">
+        <id property="cateId" column="cate_id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+
+    <resultMap id="cate_shop_result_map" type="com.ybb.cars.domain.vo.CateGoryVo"
+               extends="baseCategory">
+
+        <collection property="cars" ofType="com.ybb.cars.domain.entity.Car"
+                    resultMap="com.ybb.cars.mapper.CarMapper.CarBaseResult">
+        </collection>
+    </resultMap>
+
+<!--
+    <select id="findCars" resultMap="cate_shop_result_map">
+        select c.cate_id, c.name,
+            s.car_id, s.car_name, s.car_title, s.car_price
+        from category c left join car s on c.cate_id=s.
+    </select>-->
+
+</mapper>

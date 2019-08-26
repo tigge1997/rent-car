@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ybb.cars.mapper.ShopCarMapper">
+
+    <resultMap id="carShopResult" type="com.ybb.cars.domain.vo.ShopCarVo">
+        <id property="carCartId" column="car_cart_id"/>
+        <result property="uid" column="uid"/>
+        <result property="carCartNumber" column="car_cart_number"/>
+        <result property="carCartStatus" column="car_cart_status"/>
+        <collection property="cars" ofType="com.ybb.cars.domain.entity.Car">
+            <id property="carId" column="car_id"/>
+            <result property="carName" column="car_name"/>
+            <result property="carPrice" column="car_price"/>
+            <result property="carImage" column="car_image"/>
+        </collection>
+    </resultMap>
+
+    <!-- 通过用户ID查看购物车-->
+    <select id="findCarByUid" resultMap="carShopResult">
+        select sc.car_cart_id, sc.uid, sc.car_cart_status, sc.car_cart_number,
+                c.car_id, c.car_menu1_id,c.car_name,c.car_price,c.car_image
+        from  car_cart sc left join car c on sc.car_cart_id = c.car_id
+        where sc.car_cart_status = 0 and sc.uid = #{uid}
+    </select>
+
+    <select id="findCarByUidCid" resultMap="com.ybb.cars.mapper.ShopCarMapper.carShopResult">
+        select *
+        from car_sc sc
+        where sc.sc_status=0 and sc.uid=#{uid} and sc.cid=#{cid}
+    </select>
+    <insert id="addCar">
+        insert into car_sc(uid,sc_number,cid)
+                values (#{uid},#{number},#{cid})
+    </insert>
+
+    <update id="updateCar">
+        update car_sc
+        set sc_number=sc_number+#{number}
+        where uid=#{uid} and cid=#{carId} and sc_status=0
+    </update>
+
+    <insert id="deleteCar">
+        update car_sc
+            set sc_status=0
+        where scid=#{scid}
+    </insert>
+</mapper>
